@@ -12,7 +12,7 @@ namespace PracticeTask4
 {
     public partial class Form1 : Form
     {
-        double e, sum = 0;
+        public double e, sum = 0;
         public Form1()
         {
             InitializeComponent();
@@ -22,30 +22,24 @@ namespace PracticeTask4
         {
 
         }
-        void Sum_Calculation()
+        public void Sum_Calculation() // Подсчет суммы ряда
         {
-            double current_term = 0;
-            sum = 0;
-            int i = 1;
+            double current_term = 0; // Текущий член ряда
+            sum = 0; // Текущая сумма
+            int i = 1; // Текущая степень
             do
             {
-                current_term = 1 / (Math.Pow(i, 2));
-                sum += current_term;
-                i++;
-            } while (Math.Abs(current_term) >= e);
+                current_term = 1 / (Math.Pow(i, 2)); // Вычисление текущего члена ряда
+                sum += current_term; // Прибавление к сумме
+                i++; // Увеличение степени
+            } while (Math.Abs(current_term) >= e); // Пока текущий член по модулю не меньше е
             SumOutput.Text = sum.ToString();
-            int rounding = 10;
-            if (SumOutput.Location.X + SumOutput.Size.Width >= this.Width)
-            {
-                sum = Math.Round(sum, rounding);
-                SumOutput.Text = sum.ToString();
-            }
-            SumOutput.Focus();
+            eInput.Focus();
         }
 
         private void eInput_TextChanged(object sender, EventArgs e)
         {
-            if (SumOutput.Text != string.Empty)
+            if (SumOutput.Text != string.Empty) // Очистка вывода
             {
                 label2.Visible = false;
                 SumOutput.Visible = false;
@@ -55,22 +49,23 @@ namespace PracticeTask4
 
         private void eInput_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter) // Нажат энтер
             {
-                if (SumOutput.Text != string.Empty)
+                if (SumOutput.Text != string.Empty) // Очистка формы
                 {
                     label2.Visible = false;
                     SumOutput.Visible = false;
                     SumOutput.Text = string.Empty;
                 }
-                eInput.Text = eInput.Text.Replace('.', ',');
-                if (double.TryParse(eInput.Text, out this.e))
+                eInput.Text = eInput.Text.Replace('.', ','); // Замена точки на запятую для корректного парса строки
+                if (double.TryParse(eInput.Text, out this.e)) // Проверка, введено ли вещественное число
                 {
-                    if (this.e > 0)
+                    if (this.e > 0) // е больше нуля
                     {
+                        if (this.e > 1) this.e = 1; // Если е больше 1, то вычисления будут такими же, как при е = 1
                         label2.Visible = true;
                         SumOutput.Visible = true;
-                        Sum_Calculation();
+                        Sum_Calculation(); // Подсчет
                     }
                     else MessageBox.Show("Введите положительное число!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
